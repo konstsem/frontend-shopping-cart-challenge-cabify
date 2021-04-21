@@ -1,1 +1,1 @@
-# minimal-reactjs-boilerplate
+# frontend shopping cart challenge for cabify
