@@ -2,7 +2,8 @@ import React from 'react';
 import { uniqueId } from 'lodash';
 import CartString from './CartString';
 
-function ShoppingCart (props) {
+function ShoppingCart(props) {
+  const { items, countOps } = props;
   return (
     <section className="products">
       <h1 className="main">Shopping cart</h1>
@@ -15,9 +16,7 @@ function ShoppingCart (props) {
         </li>
       </ul>
       <ul className="products-list">
-    {props.items.map((item) => {
-      return (<CartString content={item} countOps={props.countOps} key={uniqueId()} />);
-    })}
+        {items.map((item) => (<CartString content={item} countOps={countOps} key={uniqueId()} />))}
       </ul>
     </section>
   );

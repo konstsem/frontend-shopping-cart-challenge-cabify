@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { render } from 'react-dom';
 import ShoppingCart from './components/ShoppingCart';
 import OrderSummery from './components/OrderSummery';
 // import './App.css';
@@ -23,7 +24,7 @@ function App() {
   });
 
   const switchPromo = () => {
-    console.log('click')
+    // apply promo code
   };
 
   const countOps = {
@@ -33,14 +34,13 @@ function App() {
         ...cart,
         items: cart.items.map((item) => {
           if (item.code === code) {
-            item.count = Number(e.target.value);
-            item.total = item.count * item.price;
+            return ({ ...item, count: Number(e.target.value), total: item.count * item.price });
           }
           return item;
         }),
         total: {
           countItems: cart.items.reduce((acc, item) => acc + item.count, 0),
-        summary: cart.items.reduce((acc, item) => acc + item.total, 0),
+          summary: cart.items.reduce((acc, item) => acc + item.total, 0),
           totalCost: cart.items.reduce((acc, item) => acc + item.total, 0) - cart.discounts.total,
         },
       });
@@ -51,17 +51,16 @@ function App() {
       setCart({
         ...cart,
         items: cart.items.map((item) => {
-        if (item.code === code) {
-          if (item.count < countMaxLimit) {
-            item.count += 1;
-            item.total = item.count * item.price;
+          if (item.code === code) {
+            if (item.count < countMaxLimit) {
+              return ({ ...item, count: item.count + 1, total: item.count * item.price });
+            }
           }
-        }
           return item;
         }),
         total: {
           countItems: cart.items.reduce((acc, item) => acc + item.count, 0),
-        summary: cart.items.reduce((acc, item) => acc + item.total, 0),
+          summary: cart.items.reduce((acc, item) => acc + item.total, 0),
           totalCost: cart.items.reduce((acc, item) => acc + item.total, 0) - cart.discounts.total,
         },
       });
@@ -72,30 +71,28 @@ function App() {
       setCart({
         ...cart,
         items: cart.items.map((item) => {
-        if (item.code === code) {
-          if (item.count > countMinLimit) {
-            item.count -= 1;
-            item.total = item.count * item.price;
+          if (item.code === code) {
+            if (item.count > countMinLimit) {
+              return ({ ...item, count: item.count - 1, total: item.count * item.price });
+            }
           }
-        }
           return item;
         }),
         total: {
           countItems: cart.items.reduce((acc, item) => acc + item.count, 0),
-        summary: cart.items.reduce((acc, item) => acc + item.total, 0),
+          summary: cart.items.reduce((acc, item) => acc + item.total, 0),
           totalCost: cart.items.reduce((acc, item) => acc + item.total, 0) - cart.discounts.total,
         },
       });
     },
   };
 
-
   return (
-      <main className="App">
+    <main className="App">
       <ShoppingCart items={cart.items} countOps={countOps} />
       <OrderSummery total={cart.total} discounts={cart.discounts} switchPromo={switchPromo} />
-      </main>
+    </main>
   );
 }
 
-export default App;
+export default () => render(<App />, document.getElementById('root'));
