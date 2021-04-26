@@ -10,4 +10,5 @@
 
 > npm start
 
-will open the project at [localhost:8080](localhost:8080)
+
+[link to working project](https://konstsem.github.io/frontend-shopping-cart-challenge-cabify)

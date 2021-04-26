@@ -6,7 +6,9 @@
   "scripts": {
     "start": "webpack-dev-server --mode=development --open --hot",
     "build": "webpack --mode=production",
-    "lint": "npx eslint . --ext .js,.jsx"
+    "lint": "npx eslint . --ext .js,.jsx",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [],
   "author": "konstsem",
@@ -31,6 +33,7 @@
     "eslint-plugin-jest": "^24.3.5",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.23.2",
+    "gh-pages": "^3.1.0",
     "html-webpack-plugin": "^4.3.0",
     "style-loader": "^1.2.1",
     "webpack": "^4.44.1",
@@ -42,5 +45,6 @@
       "@babel/preset-env",
       "@babel/preset-react"
     ]
-  }
+  },
+  "homepage": "https://konstsem.github.io/frontend-shopping-cart-challenge-cabify"
 }
