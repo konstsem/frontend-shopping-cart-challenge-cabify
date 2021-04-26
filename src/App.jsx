@@ -23,6 +23,19 @@ function App() {
     },
   });
 
+  /*
+  const setTotals = () => {
+    setCart({
+      ...cart,
+      total: {
+        countItems: cart.items.reduce((acc, item) => acc + item.count, 0),
+        summary: cart.items.reduce((acc, item) => acc + item.total, 0),
+        totalCost: cart.items.reduce((acc, item) => acc + item.total, 0) - cart.discounts.total,
+      },
+    });
+  };
+  */
+
   const switchPromo = () => {
     // apply promo code
   };
@@ -34,15 +47,11 @@ function App() {
         ...cart,
         items: cart.items.map((item) => {
           if (item.code === code) {
-            return ({ ...item, count: Number(e.target.value), total: item.count * item.price });
+            const newValue = Number(e.target.value);
+            return ({ ...item, count: newValue, total: newValue * item.price });
           }
           return item;
         }),
-        total: {
-          countItems: cart.items.reduce((acc, item) => acc + item.count, 0),
-          summary: cart.items.reduce((acc, item) => acc + item.total, 0),
-          totalCost: cart.items.reduce((acc, item) => acc + item.total, 0) - cart.discounts.total,
-        },
       });
     },
 
@@ -53,16 +62,12 @@ function App() {
         items: cart.items.map((item) => {
           if (item.code === code) {
             if (item.count < countMaxLimit) {
-              return ({ ...item, count: item.count + 1, total: item.count * item.price });
+              const newValue = item.count + 1;
+              return ({ ...item, count: newValue, total: newValue * item.price });
             }
           }
           return item;
         }),
-        total: {
-          countItems: cart.items.reduce((acc, item) => acc + item.count, 0),
-          summary: cart.items.reduce((acc, item) => acc + item.total, 0),
-          totalCost: cart.items.reduce((acc, item) => acc + item.total, 0) - cart.discounts.total,
-        },
       });
     },
 
@@ -73,16 +78,12 @@ function App() {
         items: cart.items.map((item) => {
           if (item.code === code) {
             if (item.count > countMinLimit) {
-              return ({ ...item, count: item.count - 1, total: item.count * item.price });
+              const newValue = item.count - 1;
+              return ({ ...item, count: newValue, total: newValue * item.price });
             }
           }
           return item;
         }),
-        total: {
-          countItems: cart.items.reduce((acc, item) => acc + item.count, 0),
-          summary: cart.items.reduce((acc, item) => acc + item.total, 0),
-          totalCost: cart.items.reduce((acc, item) => acc + item.total, 0) - cart.discounts.total,
-        },
       });
     },
   };
