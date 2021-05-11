@@ -8,10 +8,9 @@ function CartString(props) {
       count,
       imageName,
       price,
-      code,
-      total,
     },
-    countOps: { setCount, incCount, decCount },
+    scan,
+    cost,
   } = props;
   return (
     <li className="product row">
@@ -25,11 +24,11 @@ function CartString(props) {
         </figure>
       </div>
       <div className="col-quantity">
-        <button type="button" className="count" onClick={decCount(code)}>
+        <button type="button" className="count" onClick={scan('dec')}>
           -
         </button>
-        <input type="text" className="product-quantity" value={count} onChange={setCount(code)} />
-        <button type="button" className="count" onClick={incCount(code)}>
+        <input type="text" className="product-quantity" value={count} onChange={scan('set')} />
+        <button type="button" className="count" onClick={scan('inc')}>
           +
         </button>
       </div>
@@ -40,7 +39,7 @@ function CartString(props) {
         <span className="product-currency currency">€</span>
       </div>
       <div className="col-total">
-        <span className="product-price">{total}</span>
+        <span className="product-price">{cost}</span>
         <span className="product-currency currency">€</span>
       </div>
     </li>

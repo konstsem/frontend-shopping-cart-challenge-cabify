@@ -1,3 +1,7 @@
+import items from './cart';
+import Checkout from './Checkout';
 import app from './App';
 
-app();
+const co = new Checkout(items);
+co.init(); // fake filling the cart
+app(co);
