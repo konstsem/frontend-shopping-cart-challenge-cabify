@@ -6,6 +6,13 @@ function Main(props) {
   const { co } = props;
   const [items, setItems] = useState(co.items);
 
+  const initStateSum = co.preCalc();
+  const initTotalCost = co.total();
+  const [summary, setSummary] = useState({
+    ...initStateSum,
+    totalCost: initTotalCost,
+  });
+
   const scan = (code) => (op) => (e) => {
     // e.preventDefault();
     switch (op) {
@@ -24,6 +31,12 @@ function Main(props) {
     }
     // set new cart items list for react
     setItems([...co.items]);
+    const newSums = co.preCalc();
+    const newTotalCost = co.total();
+    setSummary({
+      ...newSums,
+      totalCost: newTotalCost,
+    });
   };
 
   const cost = (code) => co.cost(code);
@@ -31,7 +44,7 @@ function Main(props) {
   return (
     <main className="App">
       <ShoppingCart items={items} scan={scan} cost={cost} />
-      <OrderSummery total={({ totalItems: 1, totalCost: 10 })} />
+      <OrderSummery summary={summary} />
     </main>
   );
 }

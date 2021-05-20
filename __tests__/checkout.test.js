@@ -4,7 +4,7 @@ import cart from '../src/cart';
 test('init', () => {
   const co = new Checkout(cart);
   expect(co.price).toMatchObject(cart);
-  expect(co.promo).toMatchObject({});
+  expect(co.discounts).toMatchObject({});
 });
 
 test('scan and total', () => {
@@ -18,13 +18,13 @@ test('scan and total', () => {
   expect(co.items.length).toBe(1);
   const currentItem = co.items.find((item) => item.code === code);
   expect(currentItem.count).toBe(1);
-  expect(co.total().totalItems).toBe(1);
+  expect(co.total()).toBe(currentItem.price);
 
   // add the same t-shirt item
   co.scan(code).scan(code);
   expect(co.items.length).toBe(1);
   expect(currentItem.count).toBe(3);
-  expect(co.total().totalItems).toBe(3);
+  expect(co.total()).toBe(currentItem.price * 3);
 
   // add item with count argument
   co.scan(code, 6);

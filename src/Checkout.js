@@ -1,9 +1,9 @@
 export default class Checkout {
-  constructor(price, promo = {}) {
+  constructor(price, discounts = []) {
     this.price = price;
-    this.promo = promo;
+    this.discounts = discounts;
     this.cartItems = [];
-    // init(); where we make fake scaning for items
+    this.actualDiscounts = [];
   }
 
   // fake method for fill the cart
@@ -13,6 +13,20 @@ export default class Checkout {
 
   get items() {
     return this.cartItems;
+  }
+
+  totalDiscount() {
+    return this.actualDiscounts.reduce((acc, { discountAmount }) => acc + discountAmount, 0);
+  }
+
+  updateDiscounts() {
+    this.actualDiscounts = this.discounts.reduce(
+      (acc, discount) => {
+        const res = discount.check(this.items);
+        if (res) return [...acc, res];
+        return acc;
+      }, [],
+    );
   }
 
   scan(code, argument = 1) {
@@ -33,6 +47,7 @@ export default class Checkout {
           break;
       }
       // currentCartItem.count += 1;
+      this.updateDiscounts();
       return this;
     }
     const currentPriceItem = this.price.find((item) => item.code === code);
@@ -47,8 +62,10 @@ export default class Checkout {
           this.cartItems.push({ ...currentPriceItem, count: argument });
       }
       // this.cartItems.push({ ...currentPriceItem, count: 1 });
+      this.updateDiscounts();
       return this;
     }
+    this.updateDiscounts();
     return new Error(`product with code ${code} has not been found`);
   }
 
@@ -60,11 +77,19 @@ export default class Checkout {
     return null;
   }
 
-  // method total will return total count of items and total cost
-  total() {
+  preCalc() {
     return ({
-      totalItems: this.cartItems.reduce((acc, item) => acc + item.count, 0),
-      totalCost: this.cartItems.reduce((acc, item) => acc + (item.count * item.price), 0),
+      countItems: this.cartItems.reduce((acc, item) => acc + item.count, 0),
+      summaryCost: this.cartItems.reduce((acc, item) => acc + (item.count * item.price), 0),
+      actualDiscounts: this.actualDiscounts,
     });
+  }
+
+  // method total will return total cost as number
+  total() {
+    return this.cartItems.reduce(
+      (acc, item) => acc + (item.count * item.price),
+      0,
+    ) - this.totalDiscount();
   }
 }

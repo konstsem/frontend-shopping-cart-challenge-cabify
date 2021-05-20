@@ -1,20 +1,24 @@
 import React from 'react';
-// import { uniqueId } from 'lodash';
+import { uniqueId } from 'lodash';
 
 function OrderSummery(props) {
-  const { total: { totalItems, totalCost } } = props;
+  const {
+    summary: {
+      countItems, summaryCost, actualDiscounts, totalCost,
+    },
+  } = props;
   return (
     <aside className="summary">
       <h1 className="main">Order Summary</h1>
       <ul className="summary-items wrapper border">
         <li>
           <span className="summary-items-number">
-            {totalItems || 0}
+            {countItems || 0}
             {' '}
             Items
           </span>
           <span className="summary-items-price">
-            {totalCost || 0}
+            {summaryCost || 0}
             <span className="currency">
               €
             </span>
@@ -23,6 +27,21 @@ function OrderSummery(props) {
       </ul>
       <div className="summary-discounts wrapper-half border">
         <h2>Discounts</h2>
+        {actualDiscounts && (
+          <ul>
+            {actualDiscounts.map((disc) => (
+              <li key={uniqueId()}>
+                <span>{disc.name}</span>
+                <span>
+                  -
+                  {disc.discountAmount}
+                  {' '}
+                  €
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
       <div className="summary-total wrapper">
         <ul>
