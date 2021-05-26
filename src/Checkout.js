@@ -1,6 +1,6 @@
 export default class Checkout {
   constructor(price, discounts = []) {
-    this.price = price;
+    this.price = price.reduce((acc, good) => ({ ...acc, [good.code]: good }), {});
     this.discounts = discounts;
     this.cartItems = [];
     // this.actualDiscounts = [];
@@ -8,7 +8,10 @@ export default class Checkout {
 
   // fake method for fill the cart
   init() {
-    this.price.forEach((item) => this.scan(item.code));
+    this.scan('TSHIRT');
+    this.scan('MUG');
+    this.scan('CAP');
+    // this.price.forEach((item) => this.scan(item.code));
   }
 
   get items() {
@@ -25,7 +28,7 @@ export default class Checkout {
     );
   }
 
-  totalDiscount() {
+  get totalDiscount() {
     return this.actualDiscounts.reduce((acc, { discountAmount }) => acc + discountAmount, 0);
   }
 
@@ -62,7 +65,8 @@ export default class Checkout {
       // this.updateDiscounts();
       return this;
     }
-    const currentPriceItem = this.price.find((item) => item.code === code);
+    // const currentPriceItem = this.price.find((item) => item.code === code);
+    const currentPriceItem = this.price[code];
     if (currentPriceItem) {
       switch (argument) {
         case 1:
@@ -102,6 +106,6 @@ export default class Checkout {
     return this.cartItems.reduce(
       (acc, item) => acc + (item.count * item.price),
       0,
-    ) - this.totalDiscount();
+    ) - this.totalDiscount;
   }
 }
