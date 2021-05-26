@@ -3,7 +3,6 @@ export default class Checkout {
     this.price = price.reduce((acc, good) => ({ ...acc, [good.code]: good }), {});
     this.discounts = discounts;
     this.cartItems = [];
-    // this.actualDiscounts = [];
   }
 
   // fake method for fill the cart
@@ -11,7 +10,6 @@ export default class Checkout {
     this.scan('TSHIRT');
     this.scan('MUG');
     this.scan('CAP');
-    // this.price.forEach((item) => this.scan(item.code));
   }
 
   get items() {
@@ -32,18 +30,6 @@ export default class Checkout {
     return this.actualDiscounts.reduce((acc, { discountAmount }) => acc + discountAmount, 0);
   }
 
-  /*
-  updateDiscounts() {
-    this.actualDiscounts = this.discounts.reduce(
-      (acc, discount) => {
-        const res = discount.check(this.items);
-        if (res) return [...acc, res];
-        return acc;
-      }, [],
-    );
-  }
-  */
-
   scan(code, argument = 1) {
     const currentCartItem = this.cartItems.find((item) => item.code === code);
     if (currentCartItem) {
@@ -61,11 +47,8 @@ export default class Checkout {
           currentCartItem.count = argument;
           break;
       }
-      // currentCartItem.count += 1;
-      // this.updateDiscounts();
       return this;
     }
-    // const currentPriceItem = this.price.find((item) => item.code === code);
     const currentPriceItem = this.price[code];
     if (currentPriceItem) {
       switch (argument) {
@@ -77,11 +60,8 @@ export default class Checkout {
         default:
           this.cartItems.push({ ...currentPriceItem, count: argument });
       }
-      // this.cartItems.push({ ...currentPriceItem, count: 1 });
-      // this.updateDiscounts();
       return this;
     }
-    // this.updateDiscounts();
     return new Error(`product with code ${code} has not been found`);
   }
 
