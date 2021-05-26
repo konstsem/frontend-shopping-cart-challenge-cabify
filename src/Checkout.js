@@ -3,7 +3,7 @@ export default class Checkout {
     this.price = price;
     this.discounts = discounts;
     this.cartItems = [];
-    this.actualDiscounts = [];
+    // this.actualDiscounts = [];
   }
 
   // fake method for fill the cart
@@ -15,10 +15,21 @@ export default class Checkout {
     return this.cartItems;
   }
 
+  get actualDiscounts() {
+    return this.discounts.reduce(
+      (acc, discount) => {
+        const res = discount.check(this.items);
+        if (res) return [...acc, res];
+        return acc;
+      }, [],
+    );
+  }
+
   totalDiscount() {
     return this.actualDiscounts.reduce((acc, { discountAmount }) => acc + discountAmount, 0);
   }
 
+  /*
   updateDiscounts() {
     this.actualDiscounts = this.discounts.reduce(
       (acc, discount) => {
@@ -28,6 +39,7 @@ export default class Checkout {
       }, [],
     );
   }
+  */
 
   scan(code, argument = 1) {
     const currentCartItem = this.cartItems.find((item) => item.code === code);
@@ -47,7 +59,7 @@ export default class Checkout {
           break;
       }
       // currentCartItem.count += 1;
-      this.updateDiscounts();
+      // this.updateDiscounts();
       return this;
     }
     const currentPriceItem = this.price.find((item) => item.code === code);
@@ -62,10 +74,10 @@ export default class Checkout {
           this.cartItems.push({ ...currentPriceItem, count: argument });
       }
       // this.cartItems.push({ ...currentPriceItem, count: 1 });
-      this.updateDiscounts();
+      // this.updateDiscounts();
       return this;
     }
-    this.updateDiscounts();
+    // this.updateDiscounts();
     return new Error(`product with code ${code} has not been found`);
   }
 
